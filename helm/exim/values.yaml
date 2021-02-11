@@ -1,8 +1,5 @@
 # Default values for exim.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
 
-# High availability
 replicaCount: 2
 
 # Role Based Access Control
@@ -41,6 +38,12 @@ image:
 service:
   type: ClusterIP 
   port: 25
+
+workload: Deployment 
+
+volumeClaim:
+  storageClass: "managed-premium"
+  storageSize: 50Gi
 
 # SMTP server details
 # Used by exim to connect to SMTP server
