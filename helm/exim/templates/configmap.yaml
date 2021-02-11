@@ -8,11 +8,11 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
-  smtp-relay-host: '{{ .Values.smtp.relayHost }}'
-  smtp-relay-hostname: '{{ .Values.smtp.relayHostname }}'
-  smtp-relay-from-hosts: '{{ .Values.smtp.relayFromHosts }}'
-  smtp-local-domains: '{{ .Values.smtp.localDomains }}'
-  smtp-relay-username: '{{ .Values.smtp.relayUsername }}'
-  smtp-relay-to-domains: '{{ .Values.smtp.relayToDomains }}'
-  smtp-relay-to-users: '{{ .Values.smtp.relayToUsers }}'
-  smtp-relay-disable-sender-verification: '{{ .Values.smtp.relayDisableSenderVerification }}'
+  SMARTHOST: '{{ .Values.smtp.relayHost }}'
+  HOSTNAME: '{{ .Values.smtp.relayHostname }}'
+  RELAY_FROM_HOSTS: '{{ .Values.smtp.relayFromHosts }}'
+  LOCAL_DOMAINS: '{{ .Values.smtp.localDomains }}'
+  SMTP_USERNAME: '{{ .Values.smtp.relayUsername }}'
+  RELAY_TO_DOMAINS: '{{ .Values.smtp.relayToDomains }}'
+  RELAY_TO_USERS: '{{ .Values.smtp.relayToUsers }}'
+  DISABLE_SENDER_VERIFICATION: '{{ .Values.smtp.relayDisableSenderVerification }}'
