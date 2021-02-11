@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: {{ .Values.workload }}
+metadata:
+  name: {{ template "exim.fullname" . }}
+  labels:
+    app: {{ template "exim.name" . }}
+    chart: {{ template "exim.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  {{ if eq .Values.workload "StatefulSet" }}serviceName: {{ template "exim.name" . }}{{ end }}
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "exim.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "exim.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ template "exim.serviceAccountName" . }}
+      securityContext:
+        runAsUser: 100
+        runAsGroup: 101
+        fsGroup: 101
+      containers:
+      - name: {{ template "exim.name" . }}
+        image: '{{ .Values.image.repository }}:{{ .Values.image.tag }}'
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        envFrom:
+        - configMapRef:
+            name: {{ template "exim.fullname" . }}
+        - secretRef:
+            name: {{ template "exim.fullname" . }}
+        ports:
+          - name: smtp
+            containerPort: 25
+        securityContext:
+          allowPrivilegeEscalation: false
+        {{- if eq .Values.workload "StatefulSet" }}
+        volumeMounts:
+          - mountPath: "/var/spool/exim"
+            name: {{ template "exim.name" . }}-data
+        {{- end }}
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+  
+  {{- if eq .Values.workload "StatefulSet" }}
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ template "exim.name" . }}-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: {{ .Values.volumeClaim.storageClass | default "managed-premium" }}
+        resources:
+          requests:
+            storage: {{ .Values.volumeClaim.storageSize | default "50Gi" }} 
+  {{- end }}
