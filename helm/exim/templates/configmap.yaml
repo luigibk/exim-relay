@@ -16,3 +16,82 @@ data:
   RELAY_TO_DOMAINS: '{{ .Values.smtp.relayToDomains }}'
   RELAY_TO_USERS: '{{ .Values.smtp.relayToUsers }}'
   DISABLE_SENDER_VERIFICATION: '{{ .Values.smtp.relayDisableSenderVerification }}'
+{{- if .Values.fluentbit.enabled }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "exim.fullname" . }}-fluentbit
+  labels:
+    app: {{ template "exim.name" . }}
+    chart: {{ template "exim.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  # Configuration files: server, input, filters, and output
+  # =======================================================
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         1
+        Log_Level     info
+        Daemon        off
+        Parsers_File  parsers.conf
+        HTTP_Server   Off
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+        # Plugins_File /fluent-bit/etc/plugins.conf
+  
+    @INCLUDE input-exim.conf
+    @INCLUDE filter-exim.conf
+    @INCLUDE output-stdout.conf
+
+  input-exim.conf: |
+    [INPUT]
+        Name tail
+        Tag  exim.mainlog
+        Path /var/log/exim/mainlog
+
+    [INPUT]
+        Name tail
+        Tag  exim.reject
+        Path /var/log/exim/reject
+
+    [INPUT]
+        Name tail
+        Tag  exim.panic
+        Path /var/log/exim/panic
+
+  replace_info.lua: |
+        function replace_sensitive_info(tag, timestamp, record)
+          -- mask email address
+          record["log"] = string.gsub(record["log"], "([%w+%.%-_])[%w+%.%-_]*@([%w+%.%-_])[%w+%.%-_]*%.(%a%a+)", "%1***@%2***.%3")
+          return 1, timestamp, record
+        end
+
+  filter-exim.conf: |
+    [FILTER]
+        Name                lua
+        Match               *
+        script              replace_info.lua
+        call                replace_sensitive_info
+
+  output-stdout.conf: |
+    [OUTPUT]
+        Name stdout
+        Match *
+
+  parsers.conf: |
+    [PARSER]
+        Name   exim
+        Format regex
+        Regex  ^(?<time> *[^ ]* [^ ]*) +(?<message>.*)$
+        Time_Key time
+        Time_Format %Y-%m-%d %H:%M:%S
+
+    [PARSER]
+        Name        syslog
+        Format      regex
+        Regex       ^\<(?<pri>[0-9]+)\>(?<time>[^ ]* {1,2}[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?(?:[^\:]*\:)? *(?<message>.*)$
+        Time_Key    time
+        Time_Format %b %d %H:%M:%S    
+{{- end }}

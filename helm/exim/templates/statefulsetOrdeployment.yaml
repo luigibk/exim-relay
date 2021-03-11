@@ -39,13 +39,29 @@ spec:
             containerPort: 25
         securityContext:
           allowPrivilegeEscalation: false
-        {{- if eq .Values.workload "StatefulSet" }}
+        {{- if or (eq .Values.workload "StatefulSet") .Values.fluentbit.enabled }}
         volumeMounts:
+          {{- if eq .Values.workload "StatefulSet" }}
           - mountPath: "/var/spool/exim"
             name: {{ template "exim.name" . }}-data
+          {{- end }}
+          {{- if .Values.fluentbit.enabled }}
+          - mountPath: /var/log/exim
+            name: log-volume
+          {{- end }}
         {{- end }}
         resources:
 {{ toYaml .Values.resources | indent 10 }}
+      {{- if .Values.fluentbit.enabled }}
+      - name: fluentbit
+        image: '{{ .Values.fluentbit.image.repository }}:{{ .Values.fluentbit.image.tag }}'
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+          - name: fluentbit-config-volume
+            mountPath: /fluent-bit/etc/
+          - name: log-volume
+            mountPath: /var/log/exim
+      {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
@@ -58,7 +74,15 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
-  
+    {{- if .Values.fluentbit.enabled }}
+      volumes:
+      - name: log-volume
+        emptyDir: {}
+      - name: fluentbit-config-volume
+        configMap:
+          name: {{ template "exim.fullname" . }}-fluentbit
+    {{- end }}
+
   {{- if eq .Values.workload "StatefulSet" }}
   volumeClaimTemplates:
     - metadata:

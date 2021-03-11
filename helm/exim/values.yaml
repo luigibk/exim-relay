@@ -73,3 +73,10 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+fluentbit:
+  enabled: false
+  image:
+    repository: fluent/fluent-bit
+    tag: 1.7.2
+    pullPolicy: IfNotPresent
