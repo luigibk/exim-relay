@@ -1,9 +1,23 @@
 FROM docker.io/alpine:3.13
 
-RUN apk --no-cache add exim && \
+ARG STDOUT_LOG=False
+
+RUN \
+if [ "$STDOUT_LOG" = "True" ]; then \
+    apk --no-cache add exim && \
     mkdir /var/spool/exim && \
     chmod 777 /var/spool/exim && \
-    chmod 0755 /usr/sbin/exim
+    ln -sf /dev/stdout /var/log/exim/mainlog && \
+    ln -sf /dev/stderr /var/log/exim/panic && \
+    ln -sf /dev/stderr /var/log/exim/reject && \
+    chmod 0755 /usr/sbin/exim; \
+else \
+    apk --no-cache add exim logrotate && \
+    sed -i 's/28/7/' /etc/logrotate.d/exim && \
+    mkdir /var/spool/exim && \
+    chmod 777 /var/spool/exim && \
+    chmod 0755 /usr/sbin/exim; \
+fi
 
 COPY exim.conf /etc/exim/exim.conf
 
