@@ -39,7 +39,6 @@ spec:
             containerPort: 25
         securityContext:
           allowPrivilegeEscalation: false
-        {{- if or (eq .Values.workload "StatefulSet") .Values.fluentbit.enabled }}
         volumeMounts:
           {{- if eq .Values.workload "StatefulSet" }}
           - mountPath: "/var/spool/exim"
@@ -49,7 +48,12 @@ spec:
           - mountPath: /var/log/exim
             name: log-volume
           {{- end }}
-        {{- end }}
+          {{- if eq .Values.global.environment "dev" }}
+          - mountPath: "/etc/ssl/"
+            name: mailrelay-dev-ssl
+            readOnly: true
+          {{- end }}
+
         resources:
 {{ toYaml .Values.resources | indent 10 }}
       {{- if .Values.fluentbit.enabled }}
@@ -74,14 +78,19 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
-    {{- if .Values.fluentbit.enabled }}
       volumes:
+      {{- if .Values.fluentbit.enabled }}
       - name: log-volume
         emptyDir: {}
       - name: fluentbit-config-volume
         configMap:
           name: {{ template "exim.fullname" . }}-fluentbit
-    {{- end }}
+      {{- if eq .Values.global.environment "dev" }}
+      - name: mailrelay-dev-ssl
+        secret:
+          secretName: dev-mailrelay
+          defaultMode: 0444
+      {{- end }}
 
   {{- if eq .Values.workload "StatefulSet" }}
   volumeClaimTemplates:
