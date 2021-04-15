@@ -1,7 +1,5 @@
 FROM docker.io/alpine:3.13
-
 ARG STDOUT_LOG=False
-
 RUN \
 if [ "$STDOUT_LOG" = "True" ]; then \
     apk --no-cache add exim && \
@@ -35,4 +33,5 @@ ENV LOCAL_DOMAINS=@ \
     SMTP_USERDOMAIN= \
     SMTP_USERNAME=
 
-CMD ["exim", "-bdf", "-q15m"]
+
+CMD ["exim -bdf -q15m"]
