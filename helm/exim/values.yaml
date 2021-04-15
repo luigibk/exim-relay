@@ -80,3 +80,10 @@ fluentbit:
     repository: fluent/fluent-bit
     tag: 1.7.2
     pullPolicy: IfNotPresent
+
+mtail:
+  enabled: false
+  image:
+    repository: mtail
+    tag: 0.1
+    pullPolicy: IfNotPresent
