@@ -82,6 +82,7 @@ fluentbit:
     pullPolicy: IfNotPresent
 
 mtail:
+  enabled: true
   image:
     repository: mtail
     tag: 0.1

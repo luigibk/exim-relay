@@ -62,12 +62,14 @@ spec:
           - name: log-volume
             mountPath: /var/log/exim
       {{- end }}
+      {{- if .Values.mtail.enabled }}
       - name: mtail
         image: '{{ .Values.mtail.image.repository }}:{{ .Values.mtail.image.tag }}'
         imagePullPolicy: IfNotPresent
         volumeMounts:
           - name: log-volume
             mountPath: /var/log/exim
+      {{- end }}
 
     {{- with .Values.nodeSelector }}
       nodeSelector:
