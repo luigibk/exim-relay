@@ -1,22 +1,22 @@
 FROM docker.io/alpine:3.13
-
 ARG STDOUT_LOG=False
-
 RUN \
 if [ "$STDOUT_LOG" = "True" ]; then \
-    apk --no-cache add exim && \
+    apk --no-cache add exim bash && \
     mkdir /var/spool/exim && \
     chmod 777 /var/spool/exim && \
     ln -sf /dev/stdout /var/log/exim/mainlog && \
     ln -sf /dev/stderr /var/log/exim/panic && \
     ln -sf /dev/stderr /var/log/exim/reject && \
-    chmod 0755 /usr/sbin/exim; \
+    chmod 0755 /usr/sbin/exim && \
+    chmod 0755 /usr/sbin/crond; \
 else \
-    apk --no-cache add exim logrotate && \
+    apk --no-cache add exim logrotate bash && \
     sed -i 's/28/7/' /etc/logrotate.d/exim && \
     mkdir /var/spool/exim && \
     chmod 777 /var/spool/exim && \
-    chmod 0755 /usr/sbin/exim; \
+    chmod 0755 /usr/sbin/exim && \
+    chmod 0755 /usr/sbin/crond; \
 fi
 
 COPY exim.conf /etc/exim/exim.conf
@@ -35,4 +35,7 @@ ENV LOCAL_DOMAINS=@ \
     SMTP_USERDOMAIN= \
     SMTP_USERNAME=
 
-CMD ["exim", "-bdf", "-q15m"]
+ADD crontab.txt /crontab.txt
+ADD mailqueue.sh /mailqueue.sh
+
+CMD ["exim -bdf -q15m" ; "crond -l 8 -f"]
