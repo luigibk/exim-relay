@@ -7,6 +7,12 @@ metadata:
     chart: {{ template "exim.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+  annotations:
+    {{- if .Values.prometheus.enabled }}
+    prometheus.io/scrape: "true"
+    prometheus.io/path: {{ .Values.prometheus.path | quote }}
+    prometheus.io/port: {{ .Values.prometheus.port | quote }}
+    {{- end }}
 spec:
   {{ if eq .Values.workload "StatefulSet" }}serviceName: {{ template "exim.name" . }}{{ end }}
   replicas: {{ .Values.replicaCount }}

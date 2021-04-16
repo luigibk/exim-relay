@@ -87,3 +87,8 @@ mtail:
     repository: mtail
     tag: 0.1
     pullPolicy: IfNotPresent
+
+prometheus:
+  enabled: false
+  path: /metrics
+  port: 3903
