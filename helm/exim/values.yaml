@@ -81,14 +81,14 @@ fluentbit:
     tag: 1.7.2
     pullPolicy: IfNotPresent
 
-mtail:
+eximexporter:
   enabled: false
   image:
-    repository: mtail
+    repository: exim-exporter
     tag: 0.1
     pullPolicy: IfNotPresent
 
 prometheus:
   enabled: false
   path: /metrics
-  port: 3903
+  port: 9636

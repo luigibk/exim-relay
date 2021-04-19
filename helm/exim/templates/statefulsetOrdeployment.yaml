@@ -68,13 +68,17 @@ spec:
           - name: log-volume
             mountPath: /var/log/exim
       {{- end }}
-      {{- if .Values.mtail.enabled }}
-      - name: mtail
-        image: '{{ .Values.mtail.image.repository }}:{{ .Values.mtail.image.tag }}'
+      {{- if .Values.eximexporter.enabled }}
+      - name: eximexporter
+        image: '{{ .Values.eximexporter.image.repository }}:{{ .Values.eximexporter.image.tag }}'
         imagePullPolicy: IfNotPresent
         volumeMounts:
           - name: log-volume
             mountPath: /var/log/exim
+         {{- if eq .Values.workload "StatefulSet" }}
+          - mountPath: "/var/spool/exim"
+            name: {{ template "exim.name" . }}-data
+         {{- end }}
       {{- end }}
 
     {{- with .Values.nodeSelector }}
