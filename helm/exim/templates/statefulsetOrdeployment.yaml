@@ -75,10 +75,10 @@ spec:
         volumeMounts:
           - name: log-volume
             mountPath: /var/log/exim
-         {{- if eq .Values.workload "StatefulSet" }}
-          - mountPath: "/var/spool/exim"
+          {{- if eq .Values.workload "StatefulSet" }}
+          - mountPath: /var/spool/exim
             name: {{ template "exim.name" . }}-data
-         {{- end }}
+          {{- end }}
       {{- end }}
 
     {{- with .Values.nodeSelector }}
@@ -100,6 +100,11 @@ spec:
       - name: fluentbit-config-volume
         configMap:
           name: {{ template "exim.fullname" . }}-fluentbit
+      {{- if eq .Values.workload "StatefulSet" }}
+      - name: /var/spool/exim
+        persistentVolumeClaim:
+          claimName: {{ template "exim.name" . }}-data
+      {{- end}}
     {{- end }}
 
   {{- if eq .Values.workload "StatefulSet" }}
