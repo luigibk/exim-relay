@@ -72,6 +72,11 @@ spec:
             mountPath: /fluent-bit/etc/
           - name: log-volume
             mountPath: /var/log/exim
+        {{- if eq .Values.workload "StatefulSet" }}
+          - name: /var/spool/exim
+            persistentVolumeClaim:
+              claimName: {{ template "exim.name" . }}-data
+      {{- end}}
       {{- end }}
       {{- if .Values.eximexporter.enabled }}
       - name: eximexporter
