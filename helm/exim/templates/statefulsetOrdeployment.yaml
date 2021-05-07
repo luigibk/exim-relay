@@ -73,10 +73,10 @@ spec:
           - name: log-volume
             mountPath: /var/log/exim
         {{- if eq .Values.workload "StatefulSet" }}
-          - name: /var/spool/exim
+          - name: {{ template "exim.name" . }}-data
             persistentVolumeClaim:
               claimName: {{ template "exim.name" . }}-data
-      {{- end}}
+        {{- end}}
       {{- end }}
       {{- if .Values.eximexporter.enabled }}
       - name: eximexporter
