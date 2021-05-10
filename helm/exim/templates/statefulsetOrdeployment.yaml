@@ -72,11 +72,6 @@ spec:
             mountPath: /fluent-bit/etc/
           - name: log-volume
             mountPath: /var/log/exim
-        {{- if eq .Values.workload "StatefulSet" }}
-          - name: {{ template "exim.name" . }}-data
-            persistentVolumeClaim:
-              claimName: {{ template "exim.name" . }}-data
-        {{- end}}
       {{- end }}
       {{- if .Values.eximexporter.enabled }}
       - name: eximexporter
@@ -86,8 +81,8 @@ spec:
           - name: log-volume
             mountPath: /var/log/exim
           {{- if eq .Values.workload "StatefulSet" }}
-          - mountPath: /var/spool/exim
-            name: {{ template "exim.name" . }}-data
+          - name: {{ template "exim.name" . }}-data
+            mountPath: /var/spool/exim
           {{- end }}
       {{- end }}
 
@@ -111,6 +106,11 @@ spec:
         - name: fluentbit-config-volume
           configMap:
             name: {{ template "exim.fullname" . }}-fluentbit
+        {{- if eq .Values.workload "StatefulSet" }}
+        - name: {{ template "exim.name" . }}-data
+          persistentVolumeClaim:
+            claimName: {{ template "exim.name" . }}-data
+        {{- end }}
         {{- end }}
         {{- if eq .Values.global.environment "dev" }}
         - name: mailrelay-dev-ssl
