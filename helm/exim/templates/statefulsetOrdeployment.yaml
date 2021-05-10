@@ -106,11 +106,11 @@ spec:
         - name: fluentbit-config-volume
           configMap:
             name: {{ template "exim.fullname" . }}-fluentbit
+        {{- end }}
         {{- if eq .Values.workload "StatefulSet" }}
         - name: {{ template "exim.name" . }}-data
           persistentVolumeClaim:
             claimName: {{ template "exim.name" . }}-data
-        {{- end }}
         {{- end }}
         {{- if eq .Values.global.environment "dev" }}
         - name: mailrelay-dev-ssl
