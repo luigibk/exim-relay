@@ -34,4 +34,4 @@ ENV LOCAL_DOMAINS=@ \
     SMTP_USERNAME=
 
 
-CMD ["exim -bdf -q15m"]
+CMD ["/usr/sbin/exim", "-bdf", "-q15m"]
