@@ -8,13 +8,13 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.eximExporterService.type }}
   ports:
-    - port: {{ .Values.eximexporter-service.port }}
+    - port: {{ .Values.eximExporterService.port }}
       targetPort: eximexporter-port
       name: eximexporter-port
-      {{ if and (eq .Values.eximexporter-service.type "NodePort") (.Values.eximexporter-service.nodePort) }}
-      nodePort: {{ .Values.eximexporter-service.nodePort }}
+      {{ if and (eq .Values.eximExporterService.type "NodePort") (.Values.eximExporterService.nodePort) }}
+      nodePort: {{ .Values.eximExporterService.nodePort }}
       {{ end }}
   selector:
     app: {{ template "exim.name" . }}
