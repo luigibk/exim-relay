@@ -14,7 +14,7 @@ spec:
       targetPort: eximexporter-port
       name: eximexporter-port
       {{ if and (eq .Values.eximexporter-service.type "NodePort") (.Values.eximexporter-service.nodePort) }}
-      nodePort: {{ .Values.service.nodePort }}
+      nodePort: {{ .Values.eximexporter-service.nodePort }}
       {{ end }}
   selector:
     app: {{ template "exim.name" . }}
