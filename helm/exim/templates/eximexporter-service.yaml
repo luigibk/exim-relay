@@ -11,8 +11,8 @@ spec:
   type: {{ .Values.eximExporterService.type }}
   ports:
     - port: {{ .Values.eximExporterService.port }}
-      targetPort: eximexporter-port
-      name: eximexporter-port
+      targetPort: eximexporter
+      name: eximexporter
       {{ if and (eq .Values.eximExporterService.type "NodePort") (.Values.eximExporterService.nodePort) }}
       nodePort: {{ .Values.eximExporterService.nodePort }}
       {{ end }}
