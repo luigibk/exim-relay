@@ -88,7 +88,7 @@ eximexporter:
     tag: 0.1
     pullPolicy: IfNotPresent
 
-eximexporter-service:
+eximExporterService:
   type: ClusterIP 
   port: 9636
 
