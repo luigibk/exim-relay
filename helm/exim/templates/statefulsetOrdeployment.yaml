@@ -78,7 +78,7 @@ spec:
         image: '{{ .Values.eximexporter.image.repository }}:{{ .Values.eximexporter.image.tag }}'
         imagePullPolicy: IfNotPresent
         ports:
-          - name: eximexporter-port
+          - name: eximexporter
             containerPort: 9636
         volumeMounts:
           - name: log-volume
