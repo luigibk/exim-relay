@@ -27,6 +27,7 @@ spec:
         release: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ template "exim.serviceAccountName" . }}
+      shareProcessNamespace: true
       securityContext:
         runAsUser: 100
         runAsGroup: 101
