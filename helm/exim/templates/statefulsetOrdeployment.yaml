@@ -78,6 +78,9 @@ spec:
       - name: eximexporter
         image: '{{ .Values.eximexporter.image.repository }}:{{ .Values.eximexporter.image.tag }}'
         imagePullPolicy: IfNotPresent
+        env:
+          - name: EXIM_EXECUTABLE
+            value: exim 
         ports:
           - name: eximexporter
             containerPort: 9636
