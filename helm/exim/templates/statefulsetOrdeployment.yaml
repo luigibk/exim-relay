@@ -53,7 +53,7 @@ spec:
             name: {{ template "exim.name" . }}-data
           {{- end }}
           {{- if eq .Values.global.environment "dev" }}
-          - mountPath: "/etc/ssl/"
+          - mountPath: "/etc/ssl/default-out"
             name: mailrelay-dev-ssl
             readOnly: true
           {{- end }}
