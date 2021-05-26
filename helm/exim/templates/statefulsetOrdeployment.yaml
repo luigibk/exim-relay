@@ -81,6 +81,10 @@ spec:
         env:
           - name: EXIM_EXECUTABLE
             value: exim 
+          - name: EXIM_QUEUE_DIR 
+            value: /var/spool/exim/input
+          - name: EXIM_LOG_PATH
+            value: /var/log/exim
         ports:
           - name: eximexporter
             containerPort: 9636
