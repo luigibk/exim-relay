@@ -59,7 +59,7 @@ spec:
           {{- end }}
           {{- if eq .Values.global.environment "dev" }}
           - mountPath: "/etc/ssl/internal"
-            name: internal-mailrelay-dev-ssl
+            name: internal-mailrelay-dev-tls
             readOnly: true
           {{- end }}
           {{- if .Values.fluentbit.enabled }}
@@ -139,7 +139,7 @@ spec:
                 name: dev-mailrelay-key
         {{- end }}
         {{- if eq .Values.global.environment "dev" }}
-        - name: internal-mailrelay-dev-ssl
+        - name: internal-mailrelay-dev-tls
           projected:
             defaultMode: 0444
             sources:
