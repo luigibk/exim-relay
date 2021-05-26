@@ -57,6 +57,11 @@ spec:
             name: mailrelay-dev-ssl
             readOnly: true
           {{- end }}
+          {{- if eq .Values.global.environment "dev" }}
+          - mountPath: "/etc/ssl/internal"
+            name: internal-mailrelay-dev-ssl
+            readOnly: true
+          {{- end }}
           {{- if .Values.fluentbit.enabled }}
           - mountPath: /var/log/exim
             name: log-volume
@@ -132,6 +137,14 @@ spec:
                 name: dev-mailrelay-cert
             - secret:
                 name: dev-mailrelay-key
+        {{- end }}
+        {{- if eq .Values.global.environment "dev" }}
+        - name: internal-mailrelay-dev-ssl
+          projected:
+            defaultMode: 0444
+            sources:
+            - secret:
+                name: internal-dev-mailrelay-tls
         {{- end }}
       {{- end }}
 
