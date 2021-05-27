@@ -43,8 +43,8 @@ service:
 # Expose pods with service on port 587
 service:
   starttls:
-   type: ClusterIP 
-   port: 587
+    type: ClusterIP 
+    port: 587
 
 workload: Deployment 
 
