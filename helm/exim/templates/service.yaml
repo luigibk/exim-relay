@@ -15,11 +15,17 @@ spec:
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{ end }}
   ports:
-    - port: {{ .Values.service.port }}
+    - port: {{ .Values.service.smtp.port }}
       targetPort: 8025
       name: smtp
-      {{ if and (eq .Values.service.type "NodePort") (.Values.service.nodePort) }}
-      nodePort: {{ .Values.service.nodePort }}
+      {{ if and (eq .Values.service.smtp.type "NodePort") (.Values.service.smtp.nodePort) }}
+      nodePort: {{ .Values.service.smtp.nodePort }}
+      {{ end }}
+    - port: {{ .Values.service.starttls.port }}
+      targetPort: 8587
+      name: starttls
+      {{ if and (eq .Values.service.starttls.type "NodePort") (.Values.service.starttls.nodePort) }}
+      nodePort: {{ .Values.service.starttls.nodePort }}
       {{ end }}
   selector:
     app: {{ template "exim.name" . }}

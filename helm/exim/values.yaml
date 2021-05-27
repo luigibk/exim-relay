@@ -36,8 +36,15 @@ image:
 
 # Expose pods with service on port 25
 service:
-  type: ClusterIP 
-  port: 25
+  smtp:
+    type: ClusterIP 
+    port: 25
+
+# Expose pods with service on port 587
+service:
+  starttls:
+   type: ClusterIP 
+   port: 587
 
 workload: Deployment 
 
