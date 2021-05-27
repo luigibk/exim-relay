@@ -33,7 +33,7 @@ openssl pkcs12 -in certificate.pfx -out pemkey.key -nocerts -nodes
 ```
 We use SOPS to create the secrets. A guide to creation is located [here](https://tools.hmcts.net/confluence/pages/viewpage.action?pageId=1407976401#id-%5BHowTo%5DAKSPatternDeployment-SecretsSOPSEncryption)
 
-Secrets will need to be updated here - https://github.com/hmcts/shared-services-flux/tree/master/k8s/environments/<env>/common/secrets
+Secrets will need to be updated here - https://github.com/hmcts/shared-services-flux/tree/master/k8s/environments/dev/common/secrets
 
 ## Docker
 
