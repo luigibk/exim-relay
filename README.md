@@ -13,6 +13,27 @@ The following changes have been done on top of it:
 
 - removing Received headers for mail received by exim (helps email deliverability)
 
+## Certificates
+
+Certificates currently in use:
+
+- dev-mailrelay-platform-hmcts-net
+- prod-mailrelay-platform-hmcts-net
+- dev-in.mailrelay.internal.platform.hmcts.net (self signed)
+
+CA-signed certs are stored in `dtssharedservices<env>kv`
+
+PFX files need to be split into separate `.crt` and `.key` files
+
+Example commands:
+```
+openssl pkcs12 -in certificate.pfx -out pemcrt.crt -nokeys -clcerts
+
+openssl pkcs12 -in certificate.pfx -out pemkey.key -nocerts -nodes
+```
+We use SOPS to create the secrets. A guide to creation is located [here](https://tools.hmcts.net/confluence/pages/viewpage.action?pageId=1407976401#id-%5BHowTo%5DAKSPatternDeployment-SecretsSOPSEncryption)
+
+Secrets will need to be updated here - https://github.com/hmcts/shared-services-flux/tree/master/k8s/environments/dev/common/secrets
 
 ## Docker
 
