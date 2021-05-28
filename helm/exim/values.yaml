@@ -34,17 +34,11 @@ image:
   tag: 0.2
   pullPolicy: IfNotPresent
 
-# Expose pods with service on port 25
+# Expose pods with service on port 25 and 587
 service:
-  smtp:
     type: ClusterIP 
-    port: 25
-
-# Expose pods with service on port 587
-service:
-  starttls:
-    type: ClusterIP 
-    port: 587
+    smtp-port: 25
+    starttls-port: 587
 
 workload: Deployment 
 
