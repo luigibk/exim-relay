@@ -85,7 +85,7 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
           - name: EXIM_EXECUTABLE
-            value: /usr/sbin/exim
+            value: exim
           - name: EXIM_QUEUE_DIR 
             value: /var/spool/exim/input
           - name: EXIM_LOG_PATH

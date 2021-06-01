@@ -85,7 +85,7 @@ eximexporter:
   enabled: false
   image:
     repository: exim-exporter
-    tag: 0.1
+    tag: 0.3
     pullPolicy: IfNotPresent
 
 eximExporterService:
