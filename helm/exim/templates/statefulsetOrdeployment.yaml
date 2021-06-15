@@ -7,6 +7,9 @@ metadata:
     chart: {{ template "exim.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+    {{- if .Values.global.enableAuth }}
+    aadpodidbinding: {{ .Values.aadIdentityName }}
+    {{- end }}
   annotations:
     {{- if .Values.prometheus.enabled }}
     prometheus.io/scrape: "true"
@@ -25,6 +28,9 @@ spec:
       labels:
         app: {{ template "exim.name" . }}
         release: {{ .Release.Name }}
+        {{- if .Values.global.enableAuth }}
+        aadpodidbinding: {{ .Values.aadIdentityName }}
+        {{- end }}
     spec:
       serviceAccountName: {{ template "exim.serviceAccountName" . }}
       shareProcessNamespace: true
@@ -52,14 +58,17 @@ spec:
           - mountPath: "/var/spool/exim"
             name: {{ template "exim.name" . }}-data
           {{- end }}
-          {{- if eq .Values.global.environment "dev" }}
+          {{- if .Values.global.enableTls }}
           - mountPath: "/etc/ssl/default-out"
             name: mailrelay-dev-ssl
             readOnly: true
-          {{- end }}
-          {{- if eq .Values.global.environment "dev" }}
           - mountPath: "/etc/ssl/internal"
             name: internal-mailrelay-dev-tls
+            readOnly: true
+          {{- end }}
+          {{- if .Values.global.enableAuth }}
+          - mountPath: "/etc/exim/auth"
+            name: exim-passwd
             readOnly: true
           {{- end }}
           {{- if .Values.fluentbit.enabled }}
@@ -128,7 +137,7 @@ spec:
           persistentVolumeClaim:
             claimName: {{ template "exim.name" . }}-data
         {{- end }}
-        {{- if eq .Values.global.environment "dev" }}
+        {{- if .Values.global.enableTls }}
         - name: mailrelay-dev-ssl
           projected:
             defaultMode: 0444
@@ -137,14 +146,20 @@ spec:
                 name: dev-mailrelay-cert
             - secret:
                 name: dev-mailrelay-key
-        {{- end }}
-        {{- if eq .Values.global.environment "dev" }}
         - name: internal-mailrelay-dev-tls
           projected:
             defaultMode: 0444
             sources:
             - secret:
                 name: internal-dev-mailrelay-tls
+        {{- end }}
+        {{- if .Values.global.enableAuth }}
+        - name: exim-passwd
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "mailrelay-auth-keyvault-secret-provider"
         {{- end }}
       {{- end }}
 
