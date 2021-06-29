@@ -63,9 +63,9 @@ spec:
             name: mailrelay-dev-ssl
             readOnly: true
           {{- end }}
-          {{- if .Values.global.enableInternalTls }}
+          {{- if .Values.global.enableInboundTls }}
           - mountPath: "/etc/ssl/internal"
-            name: internal-mailrelay-dev-tls
+            name: dev-inbound-mailrelay-tls
             readOnly: true
           {{- end }}
           {{- if .Values.global.enableAuth }}
@@ -149,13 +149,13 @@ spec:
             - secret:
                 name: dev-mailrelay-key
         {{- end }}
-        {{- if .Values.global.enableInternalTls }}
-        - name: internal-mailrelay-dev-tls
+        {{- if .Values.global.enableInboundTls }}
+        - name: dev-inbound-mailrelay-tls
           projected:
             defaultMode: 0444
             sources:
             - secret:
-                name: internal-dev-mailrelay-tls
+                name: dev-inbound-mailrelay-tls
         {{- end }}
         {{- if .Values.global.enableAuth }}
         - name: exim-passwd

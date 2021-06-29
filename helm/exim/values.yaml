@@ -44,7 +44,7 @@ service:
 
 global:
   enableTls: false
-  enableInternalTls: false
+  enableInboundTls: false
   enableAuth: false
   environment: dev
   
