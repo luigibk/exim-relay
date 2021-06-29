@@ -63,13 +63,8 @@ spec:
             name: mailrelay-dev-ssl
             readOnly: true
           {{- end }}
-          {{- if .Values.global.enableInternalTls }}
+          {{- if .Values.global.enableInboundTls }}
           - mountPath: "/etc/ssl/internal"
-            name: dev-inbound-internal-mailrelay-tls
-            readOnly: true
-          {{- end }}
-          {{- if .Values.global.enableExternalTls }}
-          - mountPath: "/etc/ssl/external"
             name: dev-inbound-mailrelay-tls
             readOnly: true
           {{- end }}
@@ -154,15 +149,7 @@ spec:
             - secret:
                 name: dev-mailrelay-key
         {{- end }}
-        {{- if .Values.global.enableInternalTls }}
-        - name: dev-inbound-internal-mailrelay-tls
-          projected:
-            defaultMode: 0444
-            sources:
-            - secret:
-                name: internal-dev-mailrelay-tls
-        {{- end }}
-        {{- if .Values.global.enableExternalTls }}
+        {{- if .Values.global.enableInboundTls }}
         - name: dev-inbound-mailrelay-tls
           projected:
             defaultMode: 0444
