@@ -36,7 +36,7 @@ image:
 
 # Expose pods with service on port 25 and 587
 service:
-  type: ClusterIP 
+  type: ClusterIP
   smtp:
     port: 25
   starttls:
@@ -47,8 +47,8 @@ global:
   enableInboundTls: false
   enableAuth: false
   environment: dev
-  
-workload: Deployment 
+
+workload: Deployment
 
 volumeClaim:
   storageClass: "managed-premium"
@@ -62,9 +62,9 @@ smtp:
   relayHostname: "my.host.local"
   relayFromHosts: "10.0.0.0/8,127.0.0.0/8,172.17.0.0/16,192.0.0.0/8"
   relayUsername: "relayuser"
-  relayPassword: "relaypassword" 
-  relayToDomains: "*" 
-  localDomains: "" 
+  relayPassword: "relaypassword"
+  relayToDomains: "*"
+  localDomains: ""
   relayToUsers: ""
   relayDisableSenderVerification: false
 
@@ -86,9 +86,15 @@ affinity: {}
 aadIdentityName: mailrelay
 usePodIdentity: "false"
 managedIdentityClientId: c4acf9cf-3120-4b87-baa9-3916ffd293eb
+
 authKeyVaultName: sds-mailrelay
-authKeyVaultSecrets: []      
+authKeyVaultSecrets: []
 tenantId: 531ff96d-0ae9-462a-8d2d-bec7c0b42082
+
+certificate:
+  name: "dev-in-mailrelay-platform-hmcts-net"
+  KeyVault: "acmedtssdsprod"
+  tenantId: "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
 
 fluentbit:
   enabled: false
@@ -105,7 +111,7 @@ eximexporter:
     pullPolicy: IfNotPresent
 
 eximExporterService:
-  type: ClusterIP 
+  type: ClusterIP
   port: 9636
 
 prometheus:

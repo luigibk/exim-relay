@@ -73,6 +73,11 @@ spec:
             name: exim-passwd
             readOnly: true
           {{- end }}
+          {{- if .Values.global.enableAuth }}
+          - mountPath: "/etc/ssl/certs"
+            name: exim-certs
+            readOnly: true
+          {{- end }}
           {{- if .Values.fluentbit.enabled }}
           - mountPath: /var/log/exim
             name: log-volume
@@ -97,7 +102,7 @@ spec:
         env:
           - name: EXIM_EXECUTABLE
             value: exim
-          - name: EXIM_QUEUE_DIR 
+          - name: EXIM_QUEUE_DIR
             value: /var/spool/exim/input
           - name: EXIM_LOG_PATH
             value: /var/log/exim
@@ -165,6 +170,14 @@ spec:
             volumeAttributes:
               secretProviderClass: "mailrelay-auth-keyvault-secret-provider"
         {{- end }}
+        {{- if .Values.global.enableAuth }}
+         - name: exim-certs
+           csi:
+             driver: secrets-store.csi.k8s.io
+             readOnly: true
+             volumeAttributes:
+               secretProviderClass: "mailrelay-auth-keyvault-certificate-provider"
+        {{- end }}
       {{- end }}
 
   {{- if eq .Values.workload "StatefulSet" }}
@@ -176,5 +189,5 @@ spec:
         storageClassName: {{ .Values.volumeClaim.storageClass | default "managed-premium" }}
         resources:
           requests:
-            storage: {{ .Values.volumeClaim.storageSize | default "50Gi" }} 
+            storage: {{ .Values.volumeClaim.storageSize | default "50Gi" }}
   {{- end }}
