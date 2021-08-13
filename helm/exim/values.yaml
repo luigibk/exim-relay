@@ -60,10 +60,10 @@ smtp:
   # Example with example
   relayHost: "smtp.example.com::587"
   relayHostname: "my.host.local"
-  relayFromHosts: "10.0.0.0/8,127.0.0.0/8,172.17.0.0/16,192.0.0.0/8"
+  relayFromHosts: ""
   relayUsername: "relayuser"
   relayPassword: "relaypassword" 
-  relayToDomains: "*" 
+  relayToDomains: "" 
   localDomains: "" 
   relayToUsers: ""
   relayDisableSenderVerification: false
