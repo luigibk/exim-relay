@@ -1,0 +1,18 @@
+{{- if .Values.global.enableAuth }}
+apiVersion: secrets-store.csi.x-k8s.io/v1alpha1
+kind: SecretProviderClass
+metadata:
+  name: mailrelay-auth-keyvault-certificate-provider
+spec:
+  provider: azure
+  parameters:
+    usePodIdentity: "{{ .Values.usePodIdentity }}"
+    userAssignedIdentityID: "{{ .Values.managedIdentityClientId }}"
+    keyvaultName: {{ .Values.certificate.KeyVault }}
+    objects: |
+      array:
+      - |
+        objectName: {{ .Values.certificate.name }}
+        objectType: secret
+    tenantId: {{ .Values.certificate.tenantId }}
+{{- end }}
