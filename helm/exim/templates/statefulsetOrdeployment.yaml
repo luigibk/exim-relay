@@ -73,6 +73,11 @@ spec:
             name: exim-passwd
             readOnly: true
           {{- end }}
+          {{- if .Values.global.enableAuth }}
+          - mountPath: "/etc/ssl/internal/test"
+            name: exim-certs
+            readOnly: true
+          {{- end }}
           {{- if .Values.fluentbit.enabled }}
           - mountPath: /var/log/exim
             name: log-volume
