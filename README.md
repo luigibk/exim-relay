@@ -4,7 +4,7 @@
 
 A lightweight Docker image for an [Exim](https://www.exim.org/) mail relay, based on the official Alpine image.
 
-For extra security, the container runs as exim (`uid=100` and `gid=101`), not root.
+For extra security, the container runs as exim (`uid=100` and `gid=101`), not root..
 
 This is a fork of [Industrie&Co](https://github.com/industrieco)'s wonderful (but seemingly unmaintained) [industrieco/docker-exim-relay](https://github.com/industrieco/docker-exim-relay) image.
 The following changes have been done on top of it:
