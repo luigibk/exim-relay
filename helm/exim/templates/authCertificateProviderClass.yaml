@@ -12,12 +12,12 @@ spec:
     objects: |
       array:
       - |
-        objectName: {{ .Values.certificate.name }}
-        objectAlias: {{ .Values.certificate.name }}.{{ .Values.certificate.servername }}.crt
+        objectName: {{ .Values.certificate.objectName }}
+        objectAlias: {{ .Values.certificate.name }}.{{ .Values.certificate.serverName }}.crt
         objectType: cert 
       - |
-        objectName: {{ .Values.certificate.name }}
-        objectAlias: {{ .Values.certificate.name }}.{{ .Values.certificate.servername }}.key
+        objectName: {{ .Values.certificate.objectName }}
+        objectAlias: {{ .Values.certificate.name }}.{{ .Values.certificate.serverName }}.key
         objectType: key
     tenantId: {{ .Values.certificate.tenantId }}
 {{- end }}
