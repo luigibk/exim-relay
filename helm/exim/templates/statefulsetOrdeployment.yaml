@@ -65,17 +65,12 @@ spec:
           {{- end }}
           {{- if .Values.global.enableInboundTls }}
           - mountPath: "/etc/ssl/internal"
-            name: dev-inbound-mailrelay-tls
+            name: exim-certs
             readOnly: true
           {{- end }}
           {{- if .Values.global.enableAuth }}
           - mountPath: "/etc/exim/auth"
             name: exim-passwd
-            readOnly: true
-          {{- end }}
-          {{- if .Values.global.enableAuth }}
-          - mountPath: "/etc/ssl/internal/updated"
-            name: exim-certs
             readOnly: true
           {{- end }}
           {{- if .Values.fluentbit.enabled }}
@@ -153,14 +148,6 @@ spec:
                 name: dev-mailrelay-cert
             - secret:
                 name: dev-mailrelay-key
-        {{- end }}
-        {{- if .Values.global.enableInboundTls }}
-        - name: dev-inbound-mailrelay-tls
-          projected:
-            defaultMode: 0444
-            sources:
-            - secret:
-                name: dev-inbound-mailrelay-tls
         {{- end }}
         {{- if .Values.global.enableAuth }}
         - name: exim-passwd
