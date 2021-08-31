@@ -60,7 +60,7 @@ spec:
           {{- end }}
           {{- if .Values.global.enableTls }}
           - mountPath: "/etc/ssl/default-out"
-            name: mailrelay-dev-ssl
+            name: mailrelay-outbound-ssl
             readOnly: true
           {{- end }}
           {{- if .Values.global.enableInboundTls }}
@@ -140,14 +140,14 @@ spec:
             claimName: {{ template "exim.name" . }}-data
         {{- end }}
         {{- if .Values.global.enableTls }}
-        - name: mailrelay-dev-ssl
+        - name: mailrelay-outbound-ssl
           projected:
             defaultMode: 0444
             sources:
             - secret:
-                name: dev-mailrelay-cert
+                name: {{ .Values.ssl.defaultOutCert }}
             - secret:
-                name: dev-mailrelay-key
+                name: {{ .Values.ssl.defaultOutKey }}
         {{- end }}
         {{- if .Values.global.enableAuth }}
         - name: exim-passwd

@@ -68,6 +68,11 @@ smtp:
   relayToUsers: ""
   relayDisableSenderVerification: false
 
+# default ssl cert details
+ssl:
+  defaultOutCert: dev-mailrelay-cert
+  defaultOutKey: dev-mailrelay-key
+
 # Resources needed for the pods
 resources:
   requests:
