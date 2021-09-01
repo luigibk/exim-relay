@@ -43,7 +43,7 @@ service:
     port: 587
 
 global:
-  enableTls: false
+  enableOutboundTls: false
   enableInboundTls: false
   enableAuth: false
   environment: dev
@@ -96,11 +96,15 @@ authKeyVaultSecrets: []
 tenantId: 531ff96d-0ae9-462a-8d2d-bec7c0b42082
 
 certificate:
-  name: "dev-in"
-  objectName: "dev-in-mailrelay-platform-hmcts-net"
   serverName: "mailrelay.platform.hmcts.net"
   KeyVault: "acmedtssdsprod"
   tenantId: "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
+  inboundCert:
+    name: "dev-in"
+    objectName: "dev-in-mailrelay-platform-hmcts-net"
+  outboundCert:
+    name: "dev"
+    objectName: "dev-mailrelay-platform-hmcts-net"
   
 fluentbit:
   enabled: false

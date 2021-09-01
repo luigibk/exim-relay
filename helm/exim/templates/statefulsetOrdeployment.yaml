@@ -58,14 +58,14 @@ spec:
           - mountPath: "/var/spool/exim"
             name: {{ template "exim.name" . }}-data
           {{- end }}
-          {{- if .Values.global.enableTls }}
-          - mountPath: "/etc/ssl/default-out"
-            name: mailrelay-outbound-ssl
+          {{- if .Values.global.enableOutboundTls }}
+          - mountPath: "/etc/ssl/default-outbound"
+            name: exim-outbound-certs
             readOnly: true
           {{- end }}
           {{- if .Values.global.enableInboundTls }}
-          - mountPath: "/etc/ssl/internal"
-            name: exim-certs
+          - mountPath: "/etc/ssl/inbound"
+            name: exim-inbound-certs
             readOnly: true
           {{- end }}
           {{- if .Values.global.enableAuth }}
@@ -139,16 +139,6 @@ spec:
           persistentVolumeClaim:
             claimName: {{ template "exim.name" . }}-data
         {{- end }}
-        {{- if .Values.global.enableTls }}
-        - name: mailrelay-outbound-ssl
-          projected:
-            defaultMode: 0444
-            sources:
-            - secret:
-                name: {{ .Values.ssl.defaultOutCert }}
-            - secret:
-                name: {{ .Values.ssl.defaultOutKey }}
-        {{- end }}
         {{- if .Values.global.enableAuth }}
         - name: exim-passwd
           csi:
@@ -156,12 +146,22 @@ spec:
             readOnly: true
             volumeAttributes:
               secretProviderClass: "mailrelay-auth-keyvault-secret-provider"
-        - name: exim-certs
+        {{- end }}
+        {{- if .Values.global.enableOutboundTls }}
+        - name: exim-outbound-certs
           csi:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: "mailrelay-auth-keyvault-certificate-provider"
+              secretProviderClass: "mailrelay-outbound-keyvault-certificate-provider"
+        {{- end }}
+        {{- if .Values.global.enableInboundTls }}
+        - name: exim-inbound-certs
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "mailrelay-inbound-keyvault-certificate-provider"
         {{- end }}
       {{- end }}
 

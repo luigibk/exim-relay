@@ -1,0 +1,23 @@
+{{- if .Values.global.enableAuth }}
+apiVersion: secrets-store.csi.x-k8s.io/v1alpha1
+kind: SecretProviderClass
+metadata:
+  name: mailrelay-outbound-keyvault-certificate-provider
+spec:
+  provider: azure
+  parameters:
+    usePodIdentity: "{{ .Values.usePodIdentity }}"
+    userAssignedIdentityID: "{{ .Values.managedIdentityClientId }}"
+    keyvaultName: {{ .Values.certificate.KeyVault }}
+    objects: |
+      array:
+      - |
+        objectName: {{ .Values.certificate.outboundCert.objectName }}
+        objectAlias: pemcert.crt
+        objectType: cert
+      - |
+        objectName: {{ .Values.certificate.outboundCert.objectName }}
+        objectAlias: pemcert.key
+        objectType: key
+    tenantId: {{ .Values.certificate.tenantId }}
+{{- end }}
