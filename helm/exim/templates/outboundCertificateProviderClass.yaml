@@ -12,11 +12,11 @@ spec:
     objects: |
       array:
       - |
-        objectName: {{ .Values.certificate.outboundCert.objectName }}
+        objectName: {{ .Values.certificate.inboundCert.objectName }}
         objectAlias: pemcert.crt
         objectType: cert
       - |
-        objectName: {{ .Values.certificate.outboundCert.objectName }}
+        objectName: {{ .Values.certificate.inboundCert.objectName }}
         objectAlias: pemkey.key
         objectType: key
     tenantId: {{ .Values.certificate.tenantId }}
