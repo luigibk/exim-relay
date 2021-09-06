@@ -17,7 +17,7 @@ spec:
         objectType: cert
       - |
         objectName: {{ .Values.certificate.outboundCert.objectName }}
-        objectAlias: pemckey.key
+        objectAlias: pemkey.key
         objectType: key
     tenantId: {{ .Values.certificate.tenantId }}
 {{- end }}
