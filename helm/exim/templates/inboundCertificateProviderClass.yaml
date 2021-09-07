@@ -13,11 +13,8 @@ spec:
       array:
       - |
         objectName: {{ .Values.certificate.inboundCert.objectName }}
-        objectAlias: {{ .Values.certificate.inboundCert.name }}.{{ .Values.certificate.serverName }}.crt
-        objectType: cert
-      - |
-        objectName: {{ .Values.certificate.inboundCert.objectName }}
-        objectAlias: {{ .Values.certificate.inboundCert.name }}.{{ .Values.certificate.serverName }}.key
-        objectType: key
+        objectAlias: {{ .Values.certificate.inboundCert.name }}.{{ .Values.certificate.serverName }}.pem
+        objectType: secret
+        objectFormat: "pem"
     tenantId: {{ .Values.certificate.tenantId }}
 {{- end }}
