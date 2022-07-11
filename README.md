@@ -187,4 +187,3 @@ The following table lists the configurable parameters of the chart and their def
 | `localDomains`             | LOCAL_DOMAINS    | ``|
 | `relayToUsers`             | RELAY_TO_USERS   | ``|
 | `relayDisableSenderVerification` | DISABLE_SENDER_VERIFICATION | `false` |
-
