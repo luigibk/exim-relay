@@ -103,8 +103,8 @@ certificate:
     name: "dev-in"
     objectName: "dev-in-mailrelay-platform-hmcts-net"
   outboundCert:
-    name: "dev"
-    objectName: "dev-mailrelay-platform-hmcts-net"
+    name: "dev-in"
+    objectName: "dev-in-mailrelay-platform-hmcts-net"
 
 fluentbit:
   enabled: false
