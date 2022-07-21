@@ -176,14 +176,14 @@ This can all be configured using the following variables (see also [helm/exim-re
 
 The following table lists the configurable parameters of the chart and their default values (see variables section for a description).
 
-| Parameter                  | Variable         | Default  |
-| -------------------------- | ---------------- | ----- |
-| `relayHost`                | SMARTHOST        | `smtp.example.com::587` |
-| `relayHostname`            | HOSTNAME         | `my.host.local`|
-| `relayFromHosts`           | RELAY_FROM_HOSTS | `10.0.0.0/8,127.0.0.0/8,172.17.0.0/16,192.0.0.0/8` |
-| `relayUsername`            | SMTP_USERNAME    | `relayuser` | 
-| `relayPassword`            | SMTP_PASSWORD    | `relaypassword` |
-| `relayToDomains`           | RELAY_TO_DOMAINS | `*`|
-| `localDomains`             | LOCAL_DOMAINS    | ``|
-| `relayToUsers`             | RELAY_TO_USERS   | ``|
-| `relayDisableSenderVerification` | DISABLE_SENDER_VERIFICATION | `false` |
+| Parameter                  | Variable         | Source   | Default  |
+| -------------------------- | ---------------- | -------- | -------- |
+| `relayHost`                | SMARTHOST        |  `CSI`  | `smtp.example.com::587` |
+| `relayHostname`            | HOSTNAME         |  `CSI`  | `my.host.local` |
+| `relayFromHosts`           | RELAY_FROM_HOSTS |  `CSI`  | `10.0.0.0/8,127.0.0.0/8,172.17.0.0/16,192.0.0.0/8` |
+| `relayToDomains`           | RELAY_TO_DOMAINS |  `CSI`  | `*` |
+| `relayUsername`            | SMTP_USERNAME    |  `SOPS` | `relayuser` |
+| `relayPassword`            | SMTP_PASSWORD    |  `SOPS` | `relaypassword` |
+| `localDomains`             | LOCAL_DOMAINS    |  `SOPS` | `` |
+| `relayToUsers`             | RELAY_TO_USERS   |  `SOPS` | `` |
+| `relayDisableSenderVerification` | DISABLE_SENDER_VERIFICATION | `YAML` | `false` |

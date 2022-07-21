@@ -56,14 +56,11 @@ volumeClaim:
 
 # SMTP server details
 # Used by exim to connect to SMTP server
+# At the moment the following has been removed as they are now retrived via CSI
+# relayHost, relayHostname, relayFromHosts and relayToDomains
 smtp:
-  # Example with example
-  relayHost: "smtp.example.com::587"
-  relayHostname: "my.host.local"
-  relayFromHosts: ""
   relayUsername: "relayuser"
   relayPassword: "relaypassword"
-  relayToDomains: ""
   localDomains: ""
   relayToUsers: ""
   relayDisableSenderVerification: false

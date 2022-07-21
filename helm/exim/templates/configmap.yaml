@@ -8,12 +8,10 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
-  SMARTHOST: '{{ .Values.smtp.relayHost }}'
-  HOSTNAME: '{{ .Values.smtp.relayHostname }}'
-  RELAY_FROM_HOSTS: '{{ .Values.smtp.relayFromHosts }}'
+  # At the moment, these values have been removed and are set as deployment env
+  # SMARTHOST, HOSTNAME, RELAY_FROM_HOSTS, RELAY_TO_DOMAINS
   LOCAL_DOMAINS: '{{ .Values.smtp.localDomains }}'
   SMTP_USERNAME: '{{ .Values.smtp.relayUsername }}'
-  RELAY_TO_DOMAINS: '{{ .Values.smtp.relayToDomains }}'
   RELAY_TO_USERS: '{{ .Values.smtp.relayToUsers }}'
   DISABLE_SENDER_VERIFICATION: '{{ .Values.smtp.relayDisableSenderVerification }}'
 {{- if .Values.fluentbit.enabled }}
@@ -40,7 +38,7 @@ data:
         HTTP_Listen   0.0.0.0
         HTTP_Port     2020
         # Plugins_File /fluent-bit/etc/plugins.conf
-  
+
     @INCLUDE input-exim.conf
     @INCLUDE filter-exim.conf
     @INCLUDE output-stdout.conf
@@ -93,5 +91,5 @@ data:
         Format      regex
         Regex       ^\<(?<pri>[0-9]+)\>(?<time>[^ ]* {1,2}[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?(?:[^\:]*\:)? *(?<message>.*)$
         Time_Key    time
-        Time_Format %b %d %H:%M:%S    
+        Time_Format %b %d %H:%M:%S
 {{- end }}
