@@ -57,7 +57,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: eximenvsecrets
-              key: relayhostname    
+              key: relayhostname
         - name: RELAY_FROM_HOSTS
           valueFrom:
             secretKeyRef:
@@ -94,15 +94,15 @@ spec:
             name: exim-passwd
             readOnly: true
           {{- end }}
-          {{- if .Values.fluentbit.enabled }}          
+          {{- if .Values.fluentbit.enabled }}
           - mountPath: /var/log/exim
             name: log-volume
           {{- end }}
           - mountPath: "/etc/exim/secrets"
-            name: exim-mailrelay-env-secrets
+            name: exim-env-secrets
             readOnly: true
         {{- end }}
- 
+
         resources:
 {{ toYaml .Values.resources | indent 10 }}
       {{- if .Values.fluentbit.enabled }}
@@ -188,12 +188,12 @@ spec:
             volumeAttributes:
               secretProviderClass: "mailrelay-inbound-keyvault-certificate-provider"
         {{- end }}
-        - name: exim-mailrelay-env-secrets
+        - name: exim-env-secrets
           csi:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: "exim-mailrelay-env-secrets-provider"
+              secretProviderClass: "exim-env-secrets-provider"
       {{- end }}
 
   {{- if eq .Values.workload "StatefulSet" }}
