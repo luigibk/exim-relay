@@ -7,9 +7,7 @@ metadata:
     chart: {{ template "exim.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-    {{- if .Values.global.enableAuth }}
     aadpodidbinding: {{ .Values.aadIdentityName }}
-    {{- end }}
   annotations:
     {{- if .Values.prometheus.enabled }}
     prometheus.io/scrape: "true"
@@ -28,9 +26,7 @@ spec:
       labels:
         app: {{ template "exim.name" . }}
         release: {{ .Release.Name }}
-        {{- if .Values.global.enableAuth }}
         aadpodidbinding: {{ .Values.aadIdentityName }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "exim.serviceAccountName" . }}
       shareProcessNamespace: true
