@@ -64,6 +64,7 @@ smtp:
   localDomains: ""
   relayToUsers: ""
   relayDisableSenderVerification: false
+  relayHostNameKeyVaultSecretName: relayHostname
 
 # default ssl cert details
 ssl:
