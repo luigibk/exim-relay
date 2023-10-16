@@ -26,7 +26,11 @@ spec:
       labels:
         app: {{ template "exim.name" . }}
         release: {{ .Release.Name }}
+        {{- if .Values.useWorkloadIdentity }}
+        azure.workload.identity/use: "true"
+        {{else }}
         aadpodidbinding: {{ .Values.aadIdentityName }}
+        {{- end }}
     spec:
       serviceAccountName: {{ template "exim.serviceAccountName" . }}
       shareProcessNamespace: true
