@@ -5,7 +5,7 @@ trigger:
     - master
 
 variables:
-  ubuntuImage: Ubuntu-18.04
+  ubuntuImage: Ubuntu-20.04
   majorMinorVersion: v0.2
   ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
     patchVersion: $[counter(variables['majorMinorVersion'],0)]
